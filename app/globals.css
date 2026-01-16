@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 245, 247, 250;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Workflow node styles */
+.workflow-node {
+  @apply relative p-3 rounded-lg border-2 shadow-sm transition-all duration-200;
+}
+
+.workflow-node:hover {
+  @apply shadow-md transform -translate-y-0.5;
+}
+
+.workflow-node.active {
+  @apply border-green-500 bg-green-50;
+}
+
+.workflow-node.completed {
+  @apply border-blue-500 bg-blue-50;
+}
+
+.workflow-node.canceled {
+  @apply border-red-500 bg-red-50;
+}
+
+.workflow-node.backlog {
+  @apply border-orange-500 bg-orange-50;
+}
+
+.workflow-node.draft {
+  @apply border-gray-400 bg-gray-50 border-dashed;
+}
+
+/* Card animations */
+.card-hover {
+  @apply transition-all duration-200;
+}
+
+.card-hover:hover {
+  @apply shadow-lg transform -translate-y-1;
+}
+
+/* Status badge animations */
+.status-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .7;
+  }
+}
+
+/* Sidebar transition */
+.sidebar-item {
+  @apply transition-colors duration-150;
+}
+
+/* Process card grid */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+/* Workflow connector lines */
+.connector-line {
+  @apply absolute bg-gray-300;
+}
+
+.connector-line.horizontal {
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.connector-line.vertical {
+  width: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
