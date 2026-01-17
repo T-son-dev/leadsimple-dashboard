@@ -11,11 +11,8 @@ import {
   HelpCircle,
   ChevronDown,
   Home,
-  FileText,
-  Calendar,
   Wrench
 } from 'lucide-react';
-import Image from 'next/image';
 
 interface SidebarProps {
   activeView: string;
@@ -24,9 +21,8 @@ interface SidebarProps {
 
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'processes', label: 'Processes', icon: GitBranch },
   { id: 'properties', label: 'Properties', icon: Building2 },
-  { id: 'pipeline', label: 'Lease Pipeline', icon: Calendar },
+  { id: 'processes', label: 'Processes', icon: GitBranch },
   { id: 'maintenance', label: 'Maintenance', icon: Wrench },
   { id: 'reports', label: 'Reports', icon: BarChart3 },
   { id: 'team', label: 'Team', icon: Users },
@@ -51,19 +47,6 @@ export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
             <p className="text-xs text-slate-400">Property Management</p>
           </div>
         </div>
-      </div>
-
-      {/* Company Selector */}
-      <div className="p-4 border-b border-slate-700">
-        <button className="w-full flex items-center justify-between px-3 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-emerald-500 rounded-md flex items-center justify-center text-sm font-bold">
-              BSG
-            </div>
-            <span className="text-sm font-medium">BSG Properties</span>
-          </div>
-          <ChevronDown className="w-4 h-4 text-slate-400" />
-        </button>
       </div>
 
       {/* Main Navigation */}
