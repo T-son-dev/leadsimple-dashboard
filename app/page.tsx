@@ -129,7 +129,7 @@ export default function Home() {
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </span>
               <button
-                onClick={fetchDashboardData}
+                onClick={() => fetchDashboardData()}
                 disabled={isLoading}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
               >
