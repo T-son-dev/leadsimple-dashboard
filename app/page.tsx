@@ -70,6 +70,7 @@ export default function Home() {
   const [dashboardData, setDashboardData] = useState<DashboardData>(mockDashboardData);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchDashboardData = async (retryCount = 0) => {
     setIsLoading(true);
@@ -122,24 +123,24 @@ export default function Home() {
     switch (activeView) {
       case 'dashboard':
         return (
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Refresh Button */}
-            <div className="flex items-center justify-end gap-3">
-              <span className="text-sm text-gray-500">
+            <div className="flex items-center justify-end gap-2 sm:gap-3">
+              <span className="text-xs sm:text-sm text-gray-500">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </span>
               <button
                 onClick={() => fetchDashboardData()}
                 disabled={isLoading}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                Refresh
+                <RefreshCw className={`w-3 h-3 sm:w-4 sm:h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
 
             {/* Top Row Metrics - 6 boxes as requested */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               <MetricCard
                 title="Total Properties"
                 value={metrics.totalProperties}
@@ -227,7 +228,7 @@ export default function Home() {
 
       case 'properties':
         return (
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             <VacantPropertiesTable
               properties={[...vacantMarketed, ...vacantNotMarketed]}
               title="All Vacant Properties"
@@ -238,13 +239,13 @@ export default function Home() {
 
       default:
         return (
-          <div className="p-6 flex items-center justify-center h-96">
+          <div className="p-4 sm:p-6 flex items-center justify-center h-96">
             <div className="text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Building2 className="w-8 h-8 text-gray-400" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Coming Soon</h3>
-              <p className="text-gray-500 mt-1">This section is under development</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Coming Soon</h3>
+              <p className="text-sm sm:text-base text-gray-500 mt-1">This section is under development</p>
             </div>
           </div>
         );
@@ -275,9 +276,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Sidebar activeView={activeView} onViewChange={setActiveView} />
+      <Sidebar
+        activeView={activeView}
+        onViewChange={setActiveView}
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+      />
 
-      <main className="ml-64">
+      <main className="lg:ml-64">
         <Header
           title={headerConfig.title}
           subtitle={headerConfig.subtitle}

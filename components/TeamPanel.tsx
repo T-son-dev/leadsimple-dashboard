@@ -5,11 +5,11 @@ import { teamMembers } from '@/lib/data';
 export default function TeamPanel() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
+      <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
         <h3 className="font-semibold text-gray-900">Team Workload</h3>
       </div>
 
-      <div className="p-4 space-y-3">
+      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {teamMembers.map((member) => (
           <div
             key={member.id}
