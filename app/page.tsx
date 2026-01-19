@@ -21,10 +21,9 @@ interface DashboardMetrics {
   totalProperties: number;
   vacantMarketed: number;
   vacantNotMarketed: number;
-  moveInsThisMonth: number;
-  moveOutsThisMonth: number;
-  inspectionsNeeded: number;
-  newPropertiesThisMonth: number;
+  moveInsUpcoming: number;
+  moveOutsUpcoming: number;
+  makeReadyActive: number;
 }
 
 interface VacantProperty {
@@ -56,10 +55,9 @@ const mockDashboardData: DashboardData = {
     totalProperties: 0,
     vacantMarketed: 0,
     vacantNotMarketed: 0,
-    moveInsThisMonth: 0,
-    moveOutsThisMonth: 0,
-    inspectionsNeeded: 0,
-    newPropertiesThisMonth: 0,
+    moveInsUpcoming: 0,
+    moveOutsUpcoming: 0,
+    makeReadyActive: 0,
   },
   vacantMarketed: [],
   vacantNotMarketed: [],
@@ -144,7 +142,7 @@ export default function Home() {
               <MetricCard
                 title="Total Properties"
                 value={metrics.totalProperties}
-                change={`+${metrics.newPropertiesThisMonth} this month`}
+                change="Active units"
                 changeType="positive"
                 icon={Building2}
                 iconColor="text-blue-600"
@@ -170,8 +168,8 @@ export default function Home() {
               />
               <MetricCard
                 title="Move-Ins"
-                value={metrics.moveInsThisMonth}
-                change="This month"
+                value={metrics.moveInsUpcoming}
+                change="Upcoming"
                 changeType="positive"
                 icon={LogIn}
                 iconColor="text-emerald-600"
@@ -179,18 +177,18 @@ export default function Home() {
               />
               <MetricCard
                 title="Move-Outs"
-                value={metrics.moveOutsThisMonth}
-                change="This month"
+                value={metrics.moveOutsUpcoming}
+                change="Upcoming"
                 changeType="neutral"
                 icon={LogOut}
                 iconColor="text-red-600"
                 iconBg="bg-red-100"
               />
               <MetricCard
-                title="Inspections"
-                value={metrics.inspectionsNeeded}
-                change="Needed"
-                changeType={metrics.inspectionsNeeded > 10 ? "negative" : "neutral"}
+                title="Make Ready"
+                value={metrics.makeReadyActive}
+                change="In progress"
+                changeType={metrics.makeReadyActive > 20 ? "negative" : "neutral"}
                 icon={ClipboardCheck}
                 iconColor="text-purple-600"
                 iconBg="bg-purple-100"
