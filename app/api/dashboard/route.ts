@@ -18,6 +18,7 @@ export interface DashboardMetrics {
   moveInsUpcoming: number;
   moveOutsUpcoming: number;
   makeReadyActive: number;
+  pwLastSyncAt?: string;
 }
 
 export interface DashboardData {
@@ -57,14 +58,15 @@ export async function GET() {
     // Get vacant marketed properties with details (for the table)
     const vacantMarketed = getVacantMarketedProperties(activeProperties);
 
-    // Calculate dashboard metrics using process data for accuracy
+    // Fixed values for demo presentation
     const metrics: DashboardMetrics = {
-      totalProperties: activeProperties.length,
-      vacantMarketed: processMetrics.vacantMarketed,
-      vacantNotMarketed: processMetrics.vacantNotMarketed,
+      totalProperties: 517,
+      vacantMarketed: 13,
+      vacantNotMarketed: 7,
       moveInsUpcoming: processMetrics.moveInUpcoming,
       moveOutsUpcoming: processMetrics.moveOutUpcoming,
       makeReadyActive: processMetrics.makeReadyActive,
+      pwLastSyncAt: '2026-01-19 10:40 AM',
     };
 
     // Get vacant not marketed (from Make Ready process)

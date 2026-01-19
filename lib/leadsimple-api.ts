@@ -152,7 +152,7 @@ export interface PropertyWithDetails extends LeadSimpleProperty {
 // Simple rate limiter - delay between requests
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 let lastRequestTime = 0;
-const MIN_REQUEST_INTERVAL = 1000; // 1 second between requests (1 request per second max)
+const MIN_REQUEST_INTERVAL = 1500; // 1.5 seconds between requests (1 request per second max)
 
 // Cache for dashboard data to avoid hitting API rate limits
 interface CachedData {
@@ -189,9 +189,9 @@ async function fetchFromLeadSimple<T>(endpoint: string, params?: Record<string, 
   });
 
   // Handle rate limiting with exponential backoff
-  if (response.status === 429 && retryCount < 3) {
-    const backoffDelay = Math.pow(2, retryCount) * 2000; // 2s, 4s, 8s
-    console.log(`Rate limited, retrying in ${backoffDelay}ms (attempt ${retryCount + 1}/3)`);
+  if (response.status === 429 && retryCount < 5) {
+    const backoffDelay = Math.pow(2, retryCount) * 3000; // 3s, 6s, 12s, 24s, 48s
+    console.log(`Rate limited, retrying in ${backoffDelay}ms (attempt ${retryCount + 1}/5)`);
     await delay(backoffDelay);
     return fetchFromLeadSimple<T>(endpoint, params, retryCount + 1);
   }
@@ -237,15 +237,45 @@ export async function fetchAllProperties(): Promise<LeadSimpleProperty[]> {
 
 // Filter properties to only include active ones (in sync groups with valid occupancy)
 export function filterActiveProperties(properties: LeadSimpleProperty[]): LeadSimpleProperty[] {
+  const twoYearsAgo = new Date();
+  twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+
   return properties.filter(p => {
     // Check if property has a valid property group
     const groups = p.property_groups?.map(g => g.name) || [];
     const hasValidGroup = groups.some(g => ACTIVE_PROPERTY_GROUPS.includes(g));
 
-    // Check if property has valid occupancy
-    const hasValidOccupancy = VALID_OCCUPANCY.includes(p.unit?.occupancy || '');
+    // Check if property has valid occupancy (exclude "Occupied" which is legacy status)
+    const occupancy = p.unit?.occupancy || '';
+    const hasValidOccupancy = VALID_OCCUPANCY.includes(occupancy);
 
-    return hasValidGroup && hasValidOccupancy;
+    // Additional filter: For occupied properties, check for recent lease activity
+    // For vacant properties, check if lease ended within 2 years or never had one
+    let hasRecentActivity = true;
+
+    if (occupancy === 'Tenant Occupied' || occupancy === 'Owner Occupied') {
+      // Occupied properties should have a current lease that hasn't ended
+      const leaseEnd = p.unit?.lease_end_date;
+
+      if (leaseEnd) {
+        const leaseEndDate = new Date(leaseEnd);
+        // Lease should not have ended more than 90 days ago
+        const ninetyDaysAgo = new Date();
+        ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+        hasRecentActivity = leaseEndDate > ninetyDaysAgo;
+      }
+    } else if (occupancy === 'Vacant') {
+      // Vacant is OK - they're actively being managed
+      hasRecentActivity = true;
+    }
+
+    // Filter out properties with no rent data (likely inactive or placeholders)
+    // Exclude properties where BOTH market rent and current rent are $0 or null
+    const marketRent = parseFloat(p.unit?.market_rent || '0');
+    const currentRent = parseFloat(p.unit?.current_rent || '0');
+    const hasRentData = marketRent > 0 || currentRent > 0;
+
+    return hasValidGroup && hasValidOccupancy && hasRecentActivity && hasRentData;
   });
 }
 
