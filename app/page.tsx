@@ -24,7 +24,6 @@ interface DashboardMetrics {
   moveInsUpcoming: number;
   moveOutsUpcoming: number;
   makeReadyActive: number;
-  pwLastSyncAt?: string;
 }
 
 interface VacantProperty {
@@ -137,13 +136,6 @@ export default function Home() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
-
-            {/* Propertyware Sync Info */}
-            {metrics.pwLastSyncAt && (
-              <div className="text-xs text-gray-500 mb-2">
-                Propertyware last sync: {metrics.pwLastSyncAt}
-              </div>
-            )}
 
             {/* Top Row Metrics - 6 boxes as requested */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">

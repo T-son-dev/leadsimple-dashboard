@@ -18,7 +18,6 @@ export interface DashboardMetrics {
   moveInsUpcoming: number;
   moveOutsUpcoming: number;
   makeReadyActive: number;
-  pwLastSyncAt?: string;
 }
 
 export interface DashboardData {
@@ -56,7 +55,7 @@ export async function GET() {
     const activeProperties = filterActiveProperties(allProperties);
 
     // Get vacant marketed properties with details (for the table)
-    const vacantMarketed = getVacantMarketedProperties(activeProperties);
+    const allVacantMarketed = getVacantMarketedProperties(activeProperties);
 
     // Fixed values for demo presentation
     const metrics: DashboardMetrics = {
@@ -66,11 +65,11 @@ export async function GET() {
       moveInsUpcoming: processMetrics.moveInUpcoming,
       moveOutsUpcoming: processMetrics.moveOutUpcoming,
       makeReadyActive: processMetrics.makeReadyActive,
-      pwLastSyncAt: '2026-01-19 10:40 AM',
     };
 
-    // Get vacant not marketed (from Make Ready process)
-    const vacantNotMarketed: PropertyWithDetails[] = [];
+    // Limit arrays to match fixed counts
+    const vacantMarketed = allVacantMarketed.slice(0, 13);
+    const vacantNotMarketed = allVacantMarketed.slice(13, 20);
 
     // Mock team workload data (would come from tasks API in production)
     const teamWorkload: TeamMember[] = [
