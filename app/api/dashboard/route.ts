@@ -59,7 +59,7 @@ export async function GET() {
 
     // Fixed values for demo presentation
     const metrics: DashboardMetrics = {
-      totalProperties: 517,
+      totalProperties: 518,
       vacantMarketed: 13,
       vacantNotMarketed: 7,
       moveInsUpcoming: processMetrics.moveInUpcoming,
